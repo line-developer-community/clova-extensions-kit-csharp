@@ -14,7 +14,7 @@ namespace LineDC.CEK
     /// - verify incoming request
     /// - convert request from Clova and return CEK Response
     /// </summary>
-    public class CEKClient
+    public class CEKClient : ICEKClient
     {
         static private HttpClient _httpClient;
         static private string cert;
@@ -46,7 +46,7 @@ namespace LineDC.CEK
 
             if (string.IsNullOrEmpty(cert))
                 cert = await httpClient.GetStringAsync("https://clova-cek-requests.line.me/.well-known/signature-public-key.pem");
-            
+
             RSACryptoServiceProvider provider = PemKeyUtils.GetRSAProviderFromPemString(cert.Trim());
             if (!provider.VerifyData(body, Convert.FromBase64String(signatureCEK), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1))
                 throw new Exception("Invalid Signature");
@@ -77,7 +77,7 @@ namespace LineDC.CEK
         public async Task<CEKRequest> GetRequest(string signatureCEK, Stream body, bool skipValidation = false)
         {
             byte[] bodyContent = ConvertStreamToByteArray(body);
-            if(!skipValidation)
+            if (!skipValidation)
                 await VerifySignature(signatureCEK, bodyContent);
             return JsonConvert.DeserializeObject<CEKRequest>(Encoding.UTF8.GetString(bodyContent));
         }

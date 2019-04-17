@@ -7,11 +7,12 @@ namespace LineDC.CEK.Controllers
     [Route("api/[controller]")]
     public class ClovaController : Controller
     {
-        private CEKClient client;
-        public ClovaController()
+        private ICEKClient client;
+        public ClovaController(ICEKClient client)
         {
-            client = new CEKClient();
+            this.client = client;
         }
+
         // POST api/clova
         [HttpPost]
         public async Task<IActionResult> Post()
