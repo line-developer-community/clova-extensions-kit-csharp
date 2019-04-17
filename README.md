@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/LINEDeveloperCommunity/clova-extensions-kit/_apis/build/status/clova-extensions-kit-CI?branchName=master)](https://dev.azure.com/LINEDeveloperCommunity/clova-extensions-kit/_build/latest?definitionId=3&branchName=master)
+
 # Clova CEK SDK C#
 
 C# SDK for Clova Extension Kit.
