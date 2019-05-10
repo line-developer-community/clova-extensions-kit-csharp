@@ -10,28 +10,43 @@ namespace LineDC.CEK
     /// </summary>
     public abstract class RequestHandler
     {
-        public async Task<CEKResponse> OnRequestAsync(CEKRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        protected CEKResponse Response { get; set; }
+
+        public async Task<CEKResponse> HandleRequestAsync(CEKRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (request == null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
-            return request.Request.Type switch
+            Response = new CEKResponse();
+
+            switch(request.Request.Type)
             {
-                RequestType.LaunchRequest       => await OnLaunchRequestAsync(request, cancellationToken),
-                RequestType.IntentRequest       => await OnIntentRequestAsync(request, cancellationToken),
-                RequestType.EventRequest        => await OnEventRequestAsync(request, cancellationToken),
-                RequestType.SessionEndedRequest => await OnSessionEndedRequestAsync(request, cancellationToken),
-                _                               => await OnUnrecognizedEventTypeAsync(request, cancellationToken)
-            };
+                case RequestType.LaunchRequest:
+                    await OnLaunchRequestAsync(request, cancellationToken);
+                    break;
+                case RequestType.IntentRequest:
+                    await OnIntentRequestAsync(request, cancellationToken);
+                    break;
+                case RequestType.EventRequest:
+                    await OnEventRequestAsync(request, cancellationToken);
+                    break;
+                case RequestType.SessionEndedRequest:
+                    await OnSessionEndedRequestAsync(request, cancellationToken);
+                    break;
+                default:
+                    await OnUnrecognizedEventTypeAsync(request, cancellationToken);
+                    break;
+            }
+            return Response;
         }
 
-        protected virtual Task<CEKResponse> OnLaunchRequestAsync(CEKRequest request, CancellationToken cancellationToken) => Task.Run(() => new CEKResponse());
+        protected virtual Task OnLaunchRequestAsync(CEKRequest request, CancellationToken cancellationToken) => Task.CompletedTask;
 
-        protected virtual Task<CEKResponse> OnIntentRequestAsync(CEKRequest request, CancellationToken cancellationToken) => Task.Run(() => new CEKResponse());
+        protected virtual Task OnIntentRequestAsync(CEKRequest request, CancellationToken cancellationToken) => Task.CompletedTask;
 
-        protected virtual Task<CEKResponse> OnEventRequestAsync(CEKRequest request, CancellationToken cancellationToken)
+        protected virtual Task OnEventRequestAsync(CEKRequest request, CancellationToken cancellationToken)
         {
             return request.Request.Event.Name switch
             {
@@ -48,34 +63,34 @@ namespace LineDC.CEK
                 "ProgressReportIntervalPassed"  => OnProgressReportIntervalPassedEventAsync(request, cancellationToken),
                 "ProgressReportPositionPassed"  => OnProgressReportPositionPassedEventAsync(request, cancellationToken),
                 "StreamRequested"               => OnStreamRequestedEventAsync(request, cancellationToken),
-                _                               => Task.Run(() => new CEKResponse())
+                _                               => Task.CompletedTask
             };
         }
 
-        protected virtual Task<CEKResponse> OnSkillEnabledEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.Run(() => new CEKResponse());
+        protected virtual Task OnSkillEnabledEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.CompletedTask;
 
-        protected virtual Task<CEKResponse> OnSkillDisabledEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.Run(() => new CEKResponse());
+        protected virtual Task OnSkillDisabledEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.CompletedTask;
 
-        protected virtual Task<CEKResponse> OnPlayFinishedEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.Run(() => new CEKResponse());
+        protected virtual Task OnPlayFinishedEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.CompletedTask;
 
-        protected virtual Task<CEKResponse> OnPlayPausedEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.Run(() => new CEKResponse());
+        protected virtual Task OnPlayPausedEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.CompletedTask;
 
-        protected virtual Task<CEKResponse> OnPlayResumedEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.Run(() => new CEKResponse());
+        protected virtual Task OnPlayResumedEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.CompletedTask;
 
-        protected virtual Task<CEKResponse> OnPlayStartedEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.Run(() => new CEKResponse());
+        protected virtual Task OnPlayStartedEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.CompletedTask;
 
-        protected virtual Task<CEKResponse> OnPlayStoppedEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.Run(() => new CEKResponse());
+        protected virtual Task OnPlayStoppedEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.CompletedTask;
 
-        protected virtual Task<CEKResponse> OnProgressReportDelayPassedEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.Run(() => new CEKResponse());
+        protected virtual Task OnProgressReportDelayPassedEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.CompletedTask;
 
-        protected virtual Task<CEKResponse> OnProgressReportIntervalPassedEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.Run(() => new CEKResponse());
+        protected virtual Task OnProgressReportIntervalPassedEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.CompletedTask;
 
-        protected virtual Task<CEKResponse> OnProgressReportPositionPassedEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.Run(() => new CEKResponse());
+        protected virtual Task OnProgressReportPositionPassedEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.CompletedTask;
 
-        protected virtual Task<CEKResponse> OnStreamRequestedEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.Run(() => new CEKResponse());
+        protected virtual Task OnStreamRequestedEventAsync(CEKRequest request, CancellationToken cancellationToken) => Task.CompletedTask;
 
-        protected virtual Task<CEKResponse> OnSessionEndedRequestAsync(CEKRequest request, CancellationToken cancellationToken) => Task.Run(() => new CEKResponse());
+        protected virtual Task OnSessionEndedRequestAsync(CEKRequest request, CancellationToken cancellationToken) => Task.CompletedTask;
 
-        protected virtual Task<CEKResponse> OnUnrecognizedEventTypeAsync(CEKRequest request, CancellationToken cancellationToken) => Task.Run(() => new CEKResponse());
+        protected virtual Task OnUnrecognizedEventTypeAsync(CEKRequest request, CancellationToken cancellationToken) => Task.CompletedTask;
     }
 }

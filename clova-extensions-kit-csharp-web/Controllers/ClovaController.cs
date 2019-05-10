@@ -25,7 +25,7 @@ namespace LineDC.CEK.Controllers
 
             // handle intents and events
             var handler = new SampleRequestHandler();
-            var response = await handler.OnRequestAsync(request);
+            var response = await handler.HandleRequestAsync(request);
 
             // adding session information
             response.AddSession("mySessionKey", "mySessionValue");
@@ -39,54 +39,48 @@ namespace LineDC.CEK.Controllers
 
     public class SampleRequestHandler : RequestHandler
     {
-        protected override async Task<CEKResponse> OnLaunchRequestAsync(CEKRequest request, CancellationToken cancellationToken)
+        protected override async Task OnLaunchRequestAsync(CEKRequest request, CancellationToken cancellationToken)
         {
-            var response = new CEKResponse();
             // Single Text Reply
-            response.AddText("Welcome to CEK", Lang.En);
-            response.ShouldEndSession = false;
-            return response;
+            Response.AddText("Welcome to CEK", Lang.En);
+            Response.ShouldEndSession = false;
         }
 
-        protected override async Task<CEKResponse> OnSessionEndedRequestAsync(CEKRequest request, CancellationToken cancellationToken)
+        protected override async Task OnSessionEndedRequestAsync(CEKRequest request, CancellationToken cancellationToken)
         {
-            var response = new CEKResponse();
-            response.AddText("Good bye!", Lang.En);
-            response.ShouldEndSession = true;
-            return response;
+            Response.AddText("Good bye!", Lang.En);
+            Response.ShouldEndSession = true;
         }
 
-        protected override async Task<CEKResponse> OnIntentRequestAsync(CEKRequest request, CancellationToken cancellationToken)
+        protected override async Task OnIntentRequestAsync(CEKRequest request, CancellationToken cancellationToken)
         {
-            var response = new CEKResponse();
             switch (request.Request.Intent.Name)
             {
                 case "Clova.YesIntent":
                     // Add single URL Response and Text Reprompt
-                    response.AddUrl("https://clova-common.line-scdn.net/dice/rolling_dice_sound.mp3");
-                    response.AddRepromptText("Tell me something, please", Lang.En);
-                    response.ShouldEndSession = false;
+                    Response.AddUrl("https://clova-common.line-scdn.net/dice/rolling_dice_sound.mp3");
+                    Response.AddRepromptText("Tell me something, please", Lang.En);
+                    Response.ShouldEndSession = false;
                     break;
                 case "Clova.NoIntent":
                     // Add Brief and Verbose as SpeechSet
-                    response.AddBriefText("Brief explain.", Lang.En);
-                    response.AddVerboseText("Detail explain 1.", Lang.En);
-                    response.AddVerboseText("Detail explain 2.", Lang.En);
-                    response.AddVerboseUrl("https://clova-common.line-scdn.net/dice/rolling_dice_sound.mp3");
-                    response.ShouldEndSession = false;
+                    Response.AddBriefText("Brief explain.", Lang.En);
+                    Response.AddVerboseText("Detail explain 1.", Lang.En);
+                    Response.AddVerboseText("Detail explain 2.", Lang.En);
+                    Response.AddVerboseUrl("https://clova-common.line-scdn.net/dice/rolling_dice_sound.mp3");
+                    Response.ShouldEndSession = false;
                     break;
                 case "Clova.GuideIntent":
                     // Add multiple Reposonses and Reprompts
-                    response.AddText("Sure!", Lang.En);
-                    response.AddUrl("https://clova-common.line-scdn.net/dice/rolling_dice_sound.mp3");
-                    response.AddText("Let me explain how to use it!", Lang.En);
-                    response.AddRepromptText("Did you understand?", Lang.En);
-                    response.AddRepromptText("Now tell me what you want.", Lang.En);
-                    response.AddRepromptUrl("https://clova-common.line-scdn.net/dice/rolling_dice_sound.mp3");
-                    response.ShouldEndSession = false;
+                    Response.AddText("Sure!", Lang.En);
+                    Response.AddUrl("https://clova-common.line-scdn.net/dice/rolling_dice_sound.mp3");
+                    Response.AddText("Let me explain how to use it!", Lang.En);
+                    Response.AddRepromptText("Did you understand?", Lang.En);
+                    Response.AddRepromptText("Now tell me what you want.", Lang.En);
+                    Response.AddRepromptUrl("https://clova-common.line-scdn.net/dice/rolling_dice_sound.mp3");
+                    Response.ShouldEndSession = false;
                     break;
             }
-            return response;
         }
     }
 }
