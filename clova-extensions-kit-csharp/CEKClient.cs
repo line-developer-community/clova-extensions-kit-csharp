@@ -5,6 +5,7 @@ using System.IO;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LineDC.CEK
@@ -17,6 +18,7 @@ namespace LineDC.CEK
     public class CEKClient : ICEKClient
     {
         static private HttpClient _httpClient;
+        static private RequestHandler _requestHandler;
         static private string cert;
         private HttpClient httpClient
         {
@@ -30,6 +32,11 @@ namespace LineDC.CEK
         }
         public CEKClient()
         {
+        }
+
+        public CEKClient(RequestHandler requestHandler)
+        {
+            _requestHandler = requestHandler;
         }
 
         /// <summary>
@@ -80,6 +87,23 @@ namespace LineDC.CEK
             if (!skipValidation)
                 await VerifySignature(signatureCEK, bodyContent);
             return JsonConvert.DeserializeObject<CEKRequest>(Encoding.UTF8.GetString(bodyContent));
+        }
+
+        /// <summary>
+        /// Handle CEK Request with your concrete class extended RequestHandler
+        /// </summary>
+        /// <param name="signatureCEK"></param>
+        /// <param name="body"></param>
+        /// <param name="skipValidation"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<CEKResponse> HandleRequestAsync(string signatureCEK, Stream body, bool skipValidation = false, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (_requestHandler == null)
+                throw new Exception("RequestHandler is not set");
+
+            var response = await this.GetRequest(signatureCEK, body, skipValidation);
+            return await _requestHandler.HandleRequestAsync(response, cancellationToken);
         }
     }
 }
