@@ -1,6 +1,4 @@
-﻿using LineDC.CEK.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace LineDC.CEK.Controllers
@@ -8,18 +6,18 @@ namespace LineDC.CEK.Controllers
     [Route("api/[controller]")]
     public class ClovaController : Controller
     {
-        private ICEKClient client;
+        private IClova Clova { get; }
 
-        public ClovaController(ICEKClient client)
+        public ClovaController(IClova client)
         {
-            this.client = client;
+            Clova = client;
         }
 
         // POST api/clova
         [HttpPost]
         public async Task<IActionResult> Post()
         {
-            var response = await client.HandleRequestAsync(Request.Headers["SignatureCEK"], Request.Body, true);
+            var response = await Clova.RespondAsync(Request.Headers["SignatureCEK"], Request.Body);
             return new OkObjectResult(response);
         }
     }
