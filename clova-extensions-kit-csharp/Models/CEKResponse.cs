@@ -39,10 +39,16 @@ namespace LineDC.CEK.Models
         }
 
         /// <summary>
+        /// Default response language
+        /// </summary>
+        [JsonIgnore]
+        public Lang DefaultLang { get; }
+
+        /// <summary>
         /// コンストラクター
         /// </summary>
         /// <param name="version">CEK応答バージョン</param>
-        public CEKResponse(string version = "1.0")
+        public CEKResponse(string version = "1.0", Lang defaultLang = Lang.Ja)
         {
             Response = new Response()
             {
@@ -65,6 +71,7 @@ namespace LineDC.CEK.Models
             };
             Version = version;
             SessionAttributes = new Dictionary<string, object>();
+            DefaultLang = defaultLang;
         }
 
         /// <summary>
@@ -72,7 +79,7 @@ namespace LineDC.CEK.Models
         /// </summary>
         /// <param name="text">音声用テキスト</param>
         /// <param name="lang">言語</param>
-        public CEKResponse AddText(string text, Lang lang = Lang.Ja)
+        public CEKResponse AddText(string text, Lang? lang = null)
         {
             if (Response.OutputSpeech.Values.Count > 0)
                 Response.OutputSpeech.Type = OutputSpeechType.SpeechList;
@@ -80,7 +87,7 @@ namespace LineDC.CEK.Models
             Response.OutputSpeech.Values.Add(new SpeechInfoObject()
             {
                 Type = SpeechInfoType.PlainText,
-                Lang = lang,
+                Lang = lang ?? DefaultLang,
                 Value = text
             });
             return this;
@@ -113,7 +120,7 @@ namespace LineDC.CEK.Models
         /// </summary>
         /// <param name="key">セッション情報のキー</param>
         /// <param name="value">セッション情報の値</param>
-        public CEKResponse AddSession(string key, object value)
+        public CEKResponse SetSession(string key, object value)
         {
             if (SessionAttributes.ContainsKey(key))
                 SessionAttributes[key] = value;
@@ -127,7 +134,7 @@ namespace LineDC.CEK.Models
         /// </summary>
         /// <param name="text">音声用テキスト</param>
         /// <param name="lang">言語</param>
-        public CEKResponse AddRepromptText(string text, Lang lang = Lang.Ja)
+        public CEKResponse AddRepromptText(string text, Lang? lang = null)
         {
             if (Response.Reprompt.OutputSpeech.Values.Count > 0)
                 Response.Reprompt.OutputSpeech.Type = OutputSpeechType.SpeechList;
@@ -135,7 +142,7 @@ namespace LineDC.CEK.Models
             Response.Reprompt.OutputSpeech.Values.Add(new SpeechInfoObject()
             {
                 Type = SpeechInfoType.PlainText,
-                Lang = lang,
+                Lang = lang ?? DefaultLang,
                 Value = text
             });
             return this;
@@ -165,7 +172,7 @@ namespace LineDC.CEK.Models
         /// </summary>
         /// <param name="text">音声用テキスト</param>
         /// <param name="lang">言語</param>
-        public CEKResponse AddBriefText(string text, Lang lang = Lang.Ja)
+        public CEKResponse AddBriefText(string text, Lang? lang = null)
         {
             Response.OutputSpeech.Type = OutputSpeechType.SpeechSet;
             Response.OutputSpeech.Values = null;
@@ -177,7 +184,7 @@ namespace LineDC.CEK.Models
             Response.OutputSpeech.Brief = new SpeechInfoObject()
             {
                 Type = SpeechInfoType.PlainText,
-                Lang = lang,
+                Lang = lang ?? DefaultLang,
                 Value = text
             };
             return this;
@@ -211,7 +218,7 @@ namespace LineDC.CEK.Models
         /// </summary>
         /// <param name="text">音声用テキスト</param>
         /// <param name="lang">言語</param>
-        public CEKResponse AddVerboseText(string text, Lang lang = Lang.Ja)
+        public CEKResponse AddVerboseText(string text, Lang? lang = null)
         {
             if (Response.OutputSpeech.Verbose.Values.Count > 0)
                 Response.OutputSpeech.Verbose.Type = OutputSpeechType.SpeechList;
@@ -219,7 +226,7 @@ namespace LineDC.CEK.Models
             Response.OutputSpeech.Verbose.Values.Add(new SpeechInfoObject()
             {
                 Type = SpeechInfoType.PlainText,
-                Lang = lang,
+                Lang = lang ?? DefaultLang,
                 Value = text
             });
             return this;

@@ -30,9 +30,15 @@ namespace LineDC.CEK
             }
         }
 
+        private Lang DefaultLang { get; set; }
+
         protected CEKRequest Request { get; private set; }
         protected CEKResponse Response { get; private set; }
 
+        public void SetDefaultLang(Lang defaultLang = Lang.Ja)
+        {
+            DefaultLang = defaultLang;
+        }
 
         /// <summary>
         /// Verify the signature
@@ -95,7 +101,7 @@ namespace LineDC.CEK
         public async Task<CEKResponse> RespondAsync(string signatureCEK, Stream body, bool skipValidation = false, CancellationToken cancellationToken = default)
         {
             Request = await GetRequest(signatureCEK, body, skipValidation);
-            Response = new CEKResponse();
+            Response = new CEKResponse(defaultLang: DefaultLang);
 
             switch(Request.Request.Type)
             {

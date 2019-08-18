@@ -14,7 +14,7 @@ namespace LineDC.CEK
             Logger.LogInformation("LaunchRequest");
 
             // Single Text Reply
-            Response.AddText("Welcome to CEK", Lang.En).KeepListen();
+            Response.AddText("Welcome to CEK").KeepListen();
         }
 
         protected override async Task OnIntentRequestAsync(Intent intent, Session session, CancellationToken cancellationToken)
@@ -26,10 +26,10 @@ namespace LineDC.CEK
 
                     Response
                         // adding session information
-                        .AddSession("mySessionKey", "Yes")
+                        .SetSession("mySessionKey", "Yes")
                         // Add single URL Response and Text Reprompt
                         .AddUrl("https://clova-common.line-scdn.net/dice/rolling_dice_sound.mp3")
-                        .AddRepromptText("Tell me something, please", Lang.En)
+                        .AddRepromptText("Tell me something, please")
                         .KeepListen();
                     break;
 
@@ -38,11 +38,11 @@ namespace LineDC.CEK
 
                     Response
                         // adding session information
-                        .AddSession("mySessionKey", "No")
+                        .SetSession("mySessionKey", "No")
                         // Add Brief and Verbose as SpeechSet
-                        .AddBriefText("Brief explain.", Lang.En)
-                        .AddVerboseText("Detail explain 1.", Lang.En)
-                        .AddVerboseText("Detail explain 2.", Lang.En)
+                        .AddBriefText("Brief explain.")
+                        .AddVerboseText("Detail explain 1.")
+                        .AddVerboseText("Detail explain 2.")
                         .AddVerboseUrl("https://clova-common.line-scdn.net/dice/rolling_dice_sound.mp3")
                         .KeepListen();
                     break;
@@ -52,13 +52,13 @@ namespace LineDC.CEK
 
                     Response
                         // adding session information
-                        .AddSession("mySessionKey", "Guide")
+                        .SetSession("mySessionKey", "Guide")
                         // Add multiple Reposonses and Reprompts
-                        .AddText("Sure!", Lang.En)
+                        .AddText("Sure!")
                         .AddUrl("https://clova-common.line-scdn.net/dice/rolling_dice_sound.mp3")
-                        .AddText("Let me explain how to use it!", Lang.En)
-                        .AddRepromptText("Did you understand?", Lang.En)
-                        .AddRepromptText("Now tell me what you want.", Lang.En)
+                        .AddText("Let me explain how to use it!")
+                        .AddRepromptText("Did you understand?")
+                        .AddRepromptText("Now tell me what you want.")
                         .AddRepromptUrl("https://clova-common.line-scdn.net/dice/rolling_dice_sound.mp3")
                         .KeepListen();
                     break;
@@ -75,7 +75,7 @@ namespace LineDC.CEK
             // You can also create your own session object class and pass it to SetSessionAttributesFrom in request.
             // To retrieve the object, call GetSessionAttributesAs<T>().
 
-            Response.AddText($"Good bye! Session value is {mySessionValue}.", Lang.En).KeepListen();
+            Response.AddText($"Good bye! Session value is {mySessionValue}.");
         }
     }
 }

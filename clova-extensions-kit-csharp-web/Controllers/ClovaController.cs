@@ -8,9 +8,9 @@ namespace LineDC.CEK.Controllers
     {
         private IClova Clova { get; }
 
-        public ClovaController(IClova client)
+        public ClovaController(IClova clova)
         {
-            Clova = client;
+            Clova = clova;
         }
 
         // POST api/clova

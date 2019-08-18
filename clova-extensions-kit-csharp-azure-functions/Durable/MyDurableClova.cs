@@ -20,13 +20,13 @@ namespace LineDC.CEK
                 status?.RuntimeStatus == OrchestrationRuntimeStatus.Pending ||
                 status?.RuntimeStatus == OrchestrationRuntimeStatus.Running)
             {
-                Response.AddText("Counting has not finished yet.", Lang.En);
+                Response.AddText("Counting has not finished yet.");
             }
             else
             {
                 Response
-                    .AddText("How many counts?", Lang.En)
-                    .AddRepromptText("Please specify the number of counts.", Lang.En)
+                    .AddText("How many counts?")
+                    .AddRepromptText("Please specify the number of counts.")
                     .KeepListen();
             }
         }
@@ -37,13 +37,13 @@ namespace LineDC.CEK
             {
                 // start orchestrator
                 await DurableOrchestrationClient.StartNewAsync("ClovaDurableFunction_RunOrchestrator", session.User.UserId, count);
-                Response.AddText("Started orchestrator. Please wait.", Lang.En);
+                Response.AddText("Started orchestrator. Please wait.");
             }
             else
             {
                 Response
-                    .AddText("How many counts?", Lang.En)
-                    .AddRepromptText("Please specify the number of counts.", Lang.En)
+                    .AddText("How many counts?")
+                    .AddRepromptText("Please specify the number of counts.")
                     .KeepListen();
             }
         }

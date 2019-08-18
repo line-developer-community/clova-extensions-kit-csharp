@@ -19,7 +19,7 @@ namespace LineDC.CEK
                 case "Clova.YesIntent":
                     Response
                         // adding session information
-                        .AddSession("mySessionKey", "Yes")
+                        .SetSession("mySessionKey", "Yes")
                         // Add single URL Response and Text Reprompt
                         .AddUrl("https://clova-common.line-scdn.net/dice/rolling_dice_sound.mp3")
                         .AddRepromptText("Tell me something, please", Lang.En)
@@ -29,7 +29,7 @@ namespace LineDC.CEK
                 case "Clova.NoIntent":
                     Response
                         // adding session information
-                        .AddSession("mySessionKey", "No")
+                        .SetSession("mySessionKey", "No")
                         // Add Brief and Verbose as SpeechSet
                         .AddBriefText("Brief explain.", Lang.En)
                         .AddVerboseText("Detail explain 1.", Lang.En)
