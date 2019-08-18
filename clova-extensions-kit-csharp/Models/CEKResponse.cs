@@ -32,17 +32,23 @@ namespace LineDC.CEK.Models
             {
                 return Response.ShouldEndSession;
             }
-            set
+            private set
             {
                 Response.ShouldEndSession = value;
             }
         }
 
         /// <summary>
+        /// Default response language
+        /// </summary>
+        [JsonIgnore]
+        public Lang DefaultLang { get; }
+
+        /// <summary>
         /// コンストラクター
         /// </summary>
         /// <param name="version">CEK応答バージョン</param>
-        public CEKResponse(string version = "1.0")
+        public CEKResponse(string version = "1.0", Lang defaultLang = Lang.Ja)
         {
             Response = new Response()
             {
@@ -65,6 +71,7 @@ namespace LineDC.CEK.Models
             };
             Version = version;
             SessionAttributes = new Dictionary<string, object>();
+            DefaultLang = defaultLang;
         }
 
         /// <summary>
@@ -72,7 +79,7 @@ namespace LineDC.CEK.Models
         /// </summary>
         /// <param name="text">音声用テキスト</param>
         /// <param name="lang">言語</param>
-        public void AddText(string text, Lang lang = Lang.Ja)
+        public CEKResponse AddText(string text, Lang? lang = null)
         {
             if (Response.OutputSpeech.Values.Count > 0)
                 Response.OutputSpeech.Type = OutputSpeechType.SpeechList;
@@ -80,16 +87,22 @@ namespace LineDC.CEK.Models
             Response.OutputSpeech.Values.Add(new SpeechInfoObject()
             {
                 Type = SpeechInfoType.PlainText,
-                Lang = lang,
+                Lang = lang ?? DefaultLang,
                 Value = text
             });
+            return this;
+        }
+
+        public void KeepListen()
+        {
+            Response.ShouldEndSession = false;
         }
 
         /// <summary>
         /// 音声情報を返す - URL
         /// </summary>
         /// <param name="url">音声ファイルのパス</param>
-        public void AddUrl(string url)
+        public CEKResponse AddUrl(string url)
         {
             if (Response.OutputSpeech.Values.Count > 0)
                 Response.OutputSpeech.Type = OutputSpeechType.SpeechList;
@@ -99,6 +112,7 @@ namespace LineDC.CEK.Models
                 Lang = null,
                 Value = url
             });
+            return this;
         }
 
         /// <summary>
@@ -106,12 +120,13 @@ namespace LineDC.CEK.Models
         /// </summary>
         /// <param name="key">セッション情報のキー</param>
         /// <param name="value">セッション情報の値</param>
-        public void AddSession(string key, object value)
+        public CEKResponse SetSession(string key, object value)
         {
             if (SessionAttributes.ContainsKey(key))
                 SessionAttributes[key] = value;
             else
                 SessionAttributes.Add(key, value);
+            return this;
         }
 
         /// <summary>
@@ -119,7 +134,7 @@ namespace LineDC.CEK.Models
         /// </summary>
         /// <param name="text">音声用テキスト</param>
         /// <param name="lang">言語</param>
-        public void AddRepromptText(string text, Lang lang = Lang.Ja)
+        public CEKResponse AddRepromptText(string text, Lang? lang = null)
         {
             if (Response.Reprompt.OutputSpeech.Values.Count > 0)
                 Response.Reprompt.OutputSpeech.Type = OutputSpeechType.SpeechList;
@@ -127,9 +142,10 @@ namespace LineDC.CEK.Models
             Response.Reprompt.OutputSpeech.Values.Add(new SpeechInfoObject()
             {
                 Type = SpeechInfoType.PlainText,
-                Lang = lang,
+                Lang = lang ?? DefaultLang,
                 Value = text
             });
+            return this;
         }
 
         /// <summary>
@@ -137,7 +153,7 @@ namespace LineDC.CEK.Models
         /// </summary>
         /// <param name="url">音声ファイルのパス</param>
         /// <param name="lang">言語</param>
-        public void AddRepromptUrl(string url)
+        public CEKResponse AddRepromptUrl(string url)
         {
             if (Response.Reprompt.OutputSpeech.Values.Count > 0)
                 Response.Reprompt.OutputSpeech.Type = OutputSpeechType.SpeechList;
@@ -148,6 +164,7 @@ namespace LineDC.CEK.Models
                 Lang = null,
                 Value = url
             });
+            return this;
         }
 
         /// <summary>
@@ -155,7 +172,7 @@ namespace LineDC.CEK.Models
         /// </summary>
         /// <param name="text">音声用テキスト</param>
         /// <param name="lang">言語</param>
-        public void AddBriefText(string text, Lang lang = Lang.Ja)
+        public CEKResponse AddBriefText(string text, Lang? lang = null)
         {
             Response.OutputSpeech.Type = OutputSpeechType.SpeechSet;
             Response.OutputSpeech.Values = null;
@@ -167,9 +184,10 @@ namespace LineDC.CEK.Models
             Response.OutputSpeech.Brief = new SpeechInfoObject()
             {
                 Type = SpeechInfoType.PlainText,
-                Lang = lang,
+                Lang = lang ?? DefaultLang,
                 Value = text
             };
+            return this;
         }
 
         /// <summary>
@@ -177,7 +195,7 @@ namespace LineDC.CEK.Models
         /// </summary>
         /// <param name="url">音声ファイルのパス</param>
         /// <param name="lang">言語</param>
-        public void AddBriefUrl(string url)
+        public CEKResponse AddBriefUrl(string url)
         {
             Response.OutputSpeech.Type = OutputSpeechType.SpeechSet;
             Response.OutputSpeech.Values = null;
@@ -192,6 +210,7 @@ namespace LineDC.CEK.Models
                 Lang = null,
                 Value = url
             };
+            return this;
         }
 
         /// <summary>
@@ -199,7 +218,7 @@ namespace LineDC.CEK.Models
         /// </summary>
         /// <param name="text">音声用テキスト</param>
         /// <param name="lang">言語</param>
-        public void AddVerboseText(string text, Lang lang = Lang.Ja)
+        public CEKResponse AddVerboseText(string text, Lang? lang = null)
         {
             if (Response.OutputSpeech.Verbose.Values.Count > 0)
                 Response.OutputSpeech.Verbose.Type = OutputSpeechType.SpeechList;
@@ -207,9 +226,10 @@ namespace LineDC.CEK.Models
             Response.OutputSpeech.Verbose.Values.Add(new SpeechInfoObject()
             {
                 Type = SpeechInfoType.PlainText,
-                Lang = lang,
+                Lang = lang ?? DefaultLang,
                 Value = text
-            });            
+            });
+            return this;
         }
 
         /// <summary>
@@ -217,7 +237,7 @@ namespace LineDC.CEK.Models
         /// </summary>
         /// <param name="url">音声ファイルのパス</param>
         /// <param name="lang">言語</param>
-        public void AddVerboseUrl(string url)
+        public CEKResponse AddVerboseUrl(string url)
         {
             if (Response.OutputSpeech.Verbose.Values.Count > 0)
                 Response.OutputSpeech.Verbose.Type = OutputSpeechType.SpeechList;
@@ -228,20 +248,21 @@ namespace LineDC.CEK.Models
                 Lang = null,
                 Value = url
             });
+            return this;
         }
 
         /// <summary>
         /// クラスの情報を SessionAttributes に設定する。
         /// </summary>
         /// <param name="sessionValue">セッション情報</param>
-        public void SetSessionAttributesFrom(object sessionValue)
+        public CEKResponse SetSessionAttributesFrom(object sessionValue)
         {
             SessionAttributes.Clear();
             if (sessionValue != null)
             {
                 JsonConvert.PopulateObject(JsonConvert.SerializeObject(sessionValue), SessionAttributes);
             }
+            return this;
         }
-
     }
 }

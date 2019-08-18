@@ -1,18 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>LineDC.CEK</RootNamespace>
-    <AssemblyName>ClovaCEKCSharp</AssemblyName>
+    <AssemblyName>ClovaExtensionsKitCSharp</AssemblyName>
     <Version>0.1.8</Version>
-    <Authors>kenakamu</Authors>
+    <Authors>LINE Developer Community</Authors>
     <PackageId>CEK.CSharp</PackageId>
-    <Description>Clova Extension Kit C# SDK</Description>
+    <Description>Clova Extensions Kit C# SDK</Description>
     <Copyright>MIT</Copyright>
-    <RepositoryUrl>https://github.com/kenakamu/clova-cek-sdk-csharp</RepositoryUrl>
+    <RepositoryUrl>https://github.com/line-developer-community/clova-extensions-kit-csharp</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/kenakamu/clova-cek-sdk-csharp/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/kenakamu/clova-cek-sdk-csharp</PackageProjectUrl>
-    <PackageTags>LINE,CEK</PackageTags>
+    <PackageProjectUrl>https://github.com/line-developer-community/clova-extensions-kit-csharp</PackageProjectUrl>
+    <PackageTags>LINE,CEK,Clova</PackageTags>
     <PackageReleaseNotes>0.1.8 - Added AudioPlayer
 0.1.7 - Embed Cert info for performance reason
 0.1.6 - Move SetSessionAttributesFrom method to appropriate class
@@ -22,10 +22,16 @@
 0.1.2 - fix typo
 0.1.1 - fix namespace
 0.1.0 - initial</PackageReleaseNotes>
-    <Product>Clova Extension Kit C# SDK</Product>
+    <Product>Clova Extensions Kit C# SDK</Product>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="System.Security.Cryptography.Csp" Version="4.3.0" />
   </ItemGroup>
