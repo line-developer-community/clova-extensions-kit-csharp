@@ -27,7 +27,7 @@ namespace LineDC.CEK
                 Response
                     .AddText("How many counts?")
                     .AddRepromptText("Please specify the number of counts.")
-                    .KeepListen();
+                    .KeepListening();
             }
         }
 
@@ -44,7 +44,7 @@ namespace LineDC.CEK
                 Response
                     .AddText("How many counts?")
                     .AddRepromptText("Please specify the number of counts.")
-                    .KeepListen();
+                    .KeepListening();
             }
         }
     }

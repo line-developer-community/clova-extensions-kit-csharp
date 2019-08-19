@@ -93,7 +93,7 @@ namespace LineDC.CEK.Models
             return this;
         }
 
-        public void KeepListen()
+        public void KeepListening()
         {
             Response.ShouldEndSession = false;
         }
