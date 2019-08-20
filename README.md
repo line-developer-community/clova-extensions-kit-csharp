@@ -5,115 +5,176 @@
 C# SDK for Clova Extension Kit.
 Available on NuGet: https://www.nuget.org/packages/CEK.CSharp/
 
-# Getting Started
+# Usage
+## Inherit ClovaBase abstract class
 
-1\. Instantiate Client
+Create a class that inherits `ClovaBase`.
 
 ```csharp
-client = new ClovaClient();
+public class MyClova : ClovaBase
+{
+}
 ```
 
-2\. Pass Signature Header and Body to client to get CEK Request.
+*If you need more properties or methods, use an extended interface.
 
 ```csharp
-var request = await client.GetRequest(Request.Headers["SignatureCEK"], Request.Body);
+public interface ILoggableClova : IClova
+{
+    ILogger Logger { get; set; }
+}
+
+public class MyClova : ClovaBase, ILoggableClova
+{
+    public ILogger Logger { get; set; }
+}
+```
+
+## Instantiate or Dependency Injection
+
+Instantiate the derived class.
+
+```csharp
+var clova = new MyClova();
+```
+
+If you want to use Dependency Injection, call `AddClova` extension method in the Startup class.
+
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddClova<IClova, MyClova>();
+    services.AddMvc();
+}
+```
+
+Default language is `Lang.Ja`, but you can change it.
+
+```csharp
+clova.SetDefaultLang(Lang.En);
+```
+
+or `AddClova` overload:
+
+```csharp
+services.AddClova<IClova, MyClova>(Lang.En);
+```
+
+## Call RespondAsync method
+
+Pass Signature Header and Body to handle request and create response.
+
+```csharp
+var response = await clova.RespondAsync(Request.Headers["SignatureCEK"], Request.Body);
+return new OkObjectResult(response);
 ```
 
 *If you want to skip validation, pass true at the end.
 
 ```csharp
-var request = await client.GetRequest(Request.Headers["SignatureCEK"], Request.Body, true);
+var response = await clova.RespondAsync(Request.Headers["SignatureCEK"], Request.Body, true);
 ```
 
-3\. Create CEK response.
+## Override Methods
+
+Override methods executed for each request type or event.
 
 ```csharp
-var response = new CEKResponse();
-```
-
-4\. Add Reply. *Lang.Ja by default.
-
-```csharp
-response.AddText("こんにちは!");
-response.AddUrl("https://dummy.domain/myaudio.mp3");
-response.AddText("Hi!", Lang.En);
-response.AddUrl("https://dummy.domain/myaudio.mp3", Lang.En);
-```
-
-5\. Add Brief/Verbose.
-
-```csharp
-response.AddBriefText("Brief explain.", Lang.En);
-response.AddVerboseText("Detail explain 1.", Lang.En);
-response.AddVerboseText("Detail explain 2.", Lang.En);
-response.AddVerboseUrl("https://dummy.domain/myaudio.mp3");
-```
-
-6\. Add Reprompt.
-
-```csharp
-response.AddRepromptText("Tell me something, please", Lang.En);
-response.AddRepromptUrl("https://dummy.domain/myaudio.mp3");
-```
-7\. Add session value.
-
-```csharp
-response.SetSession("mySessionKey", "mySessionValue");
-```
-
-8\. Get the session value. The default value returns if no session infromation exists.
-
-```csharp
-var mySessionValue = request.GetSessionAttribute("mySessionValue", "defaultValue");
-```
-
-# Sample
-Following sample illustrate how to check incoming request type and handle appropriately.
-
-```csharp
-switch (request.Request.Type)
+public class MyClova : ClovaBase
 {
-    case RequestType.LaunchRequest:
-        // Single Text Reply
-        response.AddText("Welcome to CEK", Lang.En);
-        response.Response.ShouldEndSession = false;
-        break;
-    case RequestType.SessionEndedRequest:
-        response.AddText("Good bye!", Lang.En);
-        response.Response.ShouldEndSession = true;
-        break;
-    case RequestType.IntentRequest:
-        switch (request.Request.Intent.Name)
-        {
-            case "Clova.YesIntent":
-                // Add single URL Response and Text Reprompt
-                response.AddUrl("https://dummy.domain/myaudio.mp3");
-                response.AddRepromptText("Tell me something, please", Lang.En);
-                response.Response.ShouldEndSession = false;
-                break;
-            case "Clova.NoIntent":
-                // Add Brief and Verbose as SpeechSet
-                response.AddBriefText("Brief explain.", Lang.En);
-                response.AddVerboseText("Detail explain 1.", Lang.En);
-                response.AddVerboseText("Detail explain 2.", Lang.En);
-                response.AddVerboseUrl("https://dummy.domain/myaudio.mp3");
-                response.Response.ShouldEndSession = false;
-                break;
-            case "Clova.GuideIntent":
-                // Add multiple Reposonses and Reprompts
-                response.AddText("Sure!", Lang.En);
-                response.AddUrl("https://dummy.domain/myaudio.mp3");
-                response.AddText("Let me explain how to use it!", Lang.En);
-                response.AddRepromptText("Did you understand?", Lang.En);
-                response.AddRepromptText("Now tell me what you want.", Lang.En);
-                response.AddRepromptUrl("https://dummy.domain/myaudio.mp3");
-                response.Response.ShouldEndSession = false;
-                break;
-        }
-        break;
+    protected override async Task OnLaunchRequestAsync(
+        Session session, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }
-return new OkObjectResult(response);
 ```
+
+*Available virtual methods
+
+Method|Parameters
+---|---
+OnLaunchRequestAsync|Session session, CancellationToken cancellationToken
+OnIntentRequestAsync|Intent intent, Session session, CancellationToken cancellationToken
+OnEventRequestAsync|Event ev, Session session, CancellationToken cancellationToken
+OnSkillEnabledEventAsync|Event ev, Session session, CancellationToken cancellationToken
+OnSkillDisabledEventAsync|Event ev, Session session, CancellationToken cancellationToken
+OnPlayFinishedEventAsync|Event ev, Session session, CancellationToken cancellationToken
+OnPlayPausedEventAsync|Event ev, Session session, CancellationToken cancellationToken
+OnPlayResumedEventAsync|Event ev, Session session, CancellationToken cancellationToken
+OnPlayStartedEventAsync|Event ev, Session session, CancellationToken cancellationToken
+OnPlayStoppedEventAsync|Event ev, Session session, CancellationToken cancellationToken
+OnProgressReportDelayPassedEventAsync|Event ev, Session session, CancellationToken cancellationToken
+OnProgressReportIntervalPassedEventAsync|Event ev, Session session, CancellationToken cancellationToken
+OnProgressReportPositionPassedEventAsync|Event ev, Session session, CancellationToken cancellationToken
+OnStreamRequestedEventAsync|Event ev, Session session, CancellationToken cancellationToken
+OnSessionEndedRequestAsync|Session session, CancellationToken cancellationToken
+OnUnrecognizedRequestAsync|CEKRequest request, CancellationToken cancellationToken
+
+
+## Add content to Response property
+
+You can add content for response of Clova Extension to `Response` property with method chaining.
+
+When you add the text, you can also set the language to overwrite default language.
+
+1\. Add Reply. 
+
+```csharp
+Response
+    .AddText("こんにちは!");
+    .AddUrl("https://dummy.domain/myaudio.mp3");
+    .AddText("Hi!", Lang.En);
+    .AddUrl("https://dummy.domain/myaudio.mp3", Lang.En);
+```
+
+2\. Add Brief/Verbose.
+
+```csharp
+Response
+    .AddBriefText("Brief explain.", Lang.En);
+    .AddVerboseText("Detail explain 1.", Lang.En);
+    .AddVerboseText("Detail explain 2.", Lang.En);
+    .AddVerboseUrl("https://dummy.domain/myaudio.mp3");
+```
+
+3\. Add Reprompt.
+
+```csharp
+Response
+    .AddRepromptText("Tell me something, please", Lang.En);
+    .AddRepromptUrl("https://dummy.domain/myaudio.mp3");
+```
+4\. Add session value.
+
+```csharp
+Response.SetSession("mySessionKey", "mySessionValue");
+```
+
+5\. Keep listening for multi-turn session.
+
+```csharp
+Response
+    .AddText("What do you want?", Lang.En)
+    .KeepListening();
+```
+
+## Use AudioPlayer 
+
+You can use CEK's AudoPlayer through the simple methods.
+
+Method|Parameters
+---|---
+PlayAudio|Source source, AudioItem audioItem, AudioPlayBehavior playBehavior
+EnqueueAudio|Source source, params AudioItem[] audioItems
+PauseAudio|-
+ResumeAudio|-
+StopAudio|-
+
+# Samples
+
+- [Azure Functions](clova-extensions-kit-csharp-azure-functions/)
+- [ASP.NET Core](clova-extensions-kit-csharp-web/)
 
 # LISENCE
 

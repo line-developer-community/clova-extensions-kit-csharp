@@ -9,7 +9,7 @@ namespace LineDC.CEK
         protected override async Task OnLaunchRequestAsync(Session session, CancellationToken cancellationToken)
         {
             // Single Text Reply
-            Response.AddText("Welcome to CEK", Lang.En).KeepListen();
+            Response.AddText("Welcome to CEK", Lang.En).KeepListening();
         }
 
         protected override async Task OnIntentRequestAsync(Intent intent, Session session, CancellationToken cancellationToken)
@@ -23,7 +23,7 @@ namespace LineDC.CEK
                         // Add single URL Response and Text Reprompt
                         .AddUrl("https://clova-common.line-scdn.net/dice/rolling_dice_sound.mp3")
                         .AddRepromptText("Tell me something, please", Lang.En)
-                        .KeepListen();
+                        .KeepListening();
                     break;
 
                 case "Clova.NoIntent":
@@ -35,7 +35,7 @@ namespace LineDC.CEK
                         .AddVerboseText("Detail explain 1.", Lang.En)
                         .AddVerboseText("Detail explain 2.", Lang.En)
                         .AddVerboseUrl("https://clova-common.line-scdn.net/dice/rolling_dice_sound.mp3")
-                        .KeepListen();
+                        .KeepListening();
                     break;
 
                 case "Clova.GuideIntent":
@@ -47,7 +47,7 @@ namespace LineDC.CEK
                         .AddRepromptText("Did you understand?", Lang.En)
                         .AddRepromptText("Now tell me what you want.", Lang.En)
                         .AddRepromptUrl("https://clova-common.line-scdn.net/dice/rolling_dice_sound.mp3")
-                        .KeepListen();
+                        .KeepListening();
                     break;
             }
         }
