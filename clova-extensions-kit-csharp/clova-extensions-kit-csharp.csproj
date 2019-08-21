@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>LineDC.CEK</RootNamespace>
     <AssemblyName>ClovaExtensionsKitCSharp</AssemblyName>
-    <Version>0.1.8</Version>
+    <Version>0.2.1</Version>
     <Authors>LINE Developer Community</Authors>
     <PackageId>CEK.CSharp</PackageId>
     <Description>Clova Extensions Kit C# SDK</Description>
@@ -13,7 +13,9 @@
     <PackageLicenseUrl>https://github.com/kenakamu/clova-cek-sdk-csharp/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/line-developer-community/clova-extensions-kit-csharp</PackageProjectUrl>
     <PackageTags>LINE,CEK,Clova</PackageTags>
-    <PackageReleaseNotes>0.1.8 - Added AudioPlayer
+    <PackageReleaseNotes>0.2.1 - Bug fix
+0.2.0 - [Breaking Change included] Change name space and how it works. Released under LINE Developer Community
+0.1.8 - Added AudioPlayer
 0.1.7 - Embed Cert info for performance reason
 0.1.6 - Move SetSessionAttributesFrom method to appropriate class
 0.1.5 - Target this library as .NET Standard 1.3
@@ -32,7 +34,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="System.Security.Cryptography.Csp" Version="4.3.0" />
   </ItemGroup>
 
