@@ -122,9 +122,9 @@ When you add the text, you can also set the language to overwrite default langua
 
 ```csharp
 Response
-    .AddText("こんにちは!");
-    .AddUrl("https://dummy.domain/myaudio.mp3");
-    .AddText("Hi!", Lang.En);
+    .AddText("こんにちは!")
+    .AddUrl("https://dummy.domain/myaudio.mp3")
+    .AddText("Hi!", Lang.En)
     .AddUrl("https://dummy.domain/myaudio.mp3", Lang.En);
 ```
 
@@ -132,9 +132,9 @@ Response
 
 ```csharp
 Response
-    .AddBriefText("Brief explain.", Lang.En);
-    .AddVerboseText("Detail explain 1.", Lang.En);
-    .AddVerboseText("Detail explain 2.", Lang.En);
+    .AddBriefText("Brief explain.", Lang.En)
+    .AddVerboseText("Detail explain 1.", Lang.En)
+    .AddVerboseText("Detail explain 2.", Lang.En)
     .AddVerboseUrl("https://dummy.domain/myaudio.mp3");
 ```
 
@@ -142,7 +142,7 @@ Response
 
 ```csharp
 Response
-    .AddRepromptText("Tell me something, please", Lang.En);
+    .AddRepromptText("Tell me something, please", Lang.En)
     .AddRepromptUrl("https://dummy.domain/myaudio.mp3");
 ```
 4\. Add session value.

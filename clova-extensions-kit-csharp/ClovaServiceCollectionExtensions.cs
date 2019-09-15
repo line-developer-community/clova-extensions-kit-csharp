@@ -12,7 +12,7 @@ namespace LineDC.CEK
             var clova = new T2();
             clova.SetDefaultLang(defaultLang);
 
-            return services.AddSingleton<T1, T2>(_ => clova);
+            return services.AddScoped<T1, T2>(_ => clova);
         }
     }
 }

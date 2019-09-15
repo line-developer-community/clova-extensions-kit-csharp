@@ -19,7 +19,7 @@ namespace LineDC.CEK
         [FunctionName("ClovaDurableFunction_HttpStart")]
         public async Task<IActionResult> HttpStart(
             [HttpTrigger(AuthorizationLevel.Function, "post")]HttpRequest req,
-            [OrchestrationClient]IDurableOrchestrationClient starter,
+            [DurableClient]IDurableOrchestrationClient starter,
             ILogger log)
         {
             // set orchestration client and logger

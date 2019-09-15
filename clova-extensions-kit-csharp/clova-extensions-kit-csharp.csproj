@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>LineDC.CEK</RootNamespace>
     <AssemblyName>ClovaExtensionsKitCSharp</AssemblyName>
-    <Version>0.1.8</Version>
+    <Version>0.1.9</Version>
     <Authors>LINE Developer Community</Authors>
     <PackageId>CEK.CSharp</PackageId>
     <Description>Clova Extensions Kit C# SDK</Description>
