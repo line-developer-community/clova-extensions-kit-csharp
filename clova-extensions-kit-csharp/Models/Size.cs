@@ -32,6 +32,6 @@ namespace LineDC.CEK.Models
         /// <summary>
         /// あらかじめ定義された規格ではない解像度。
         /// </summary>
-        Custom
+        Cusom
     }
 }
