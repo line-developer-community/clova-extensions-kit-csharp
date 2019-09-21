@@ -9,10 +9,12 @@ namespace LineDC.CEK
             where T1 : class, IClova
             where T2 : ClovaBase, T1, new()
         {
-            var clova = new T2();
-            clova.SetDefaultLang(defaultLang);
-
-            return services.AddScoped<T1, T2>(_ => clova);
+            return services.AddScoped<T1, T2>(_ =>
+            {
+                var clova = new T2();
+                clova.SetDefaultLang(defaultLang);
+                return clova;
+            });
         }
     }
 }
