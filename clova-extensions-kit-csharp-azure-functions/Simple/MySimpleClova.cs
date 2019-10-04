@@ -9,6 +9,11 @@ namespace LineDC.CEK
     {
         public ILogger Logger { get; set; }
 
+        public MySimpleClova(ClovaConfiguration config)
+        {
+            SetDefaultLang(config.DefaultLang);
+        }
+
         protected override async Task OnLaunchRequestAsync(Session session, CancellationToken cancellationToken)
         {
             Logger.LogInformation("LaunchRequest");

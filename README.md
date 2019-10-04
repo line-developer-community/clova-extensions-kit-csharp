@@ -54,10 +54,24 @@ Default language is `Lang.Ja`, but you can change it.
 clova.SetDefaultLang(Lang.En);
 ```
 
-or `AddClova` overload:
+or pass in `ClovaConfiguration`:
 
 ```csharp
-services.AddClova<IClova, MyClova>(Lang.En);
+var config = new ClovaConfiguration { DefaultLang = Lang.En };
+
+builder.Services
+    .AddSingleton(config)
+    .AddClova<IClova, MyClova>();
+```
+
+```csharp
+public class MyClova : ClovaBase
+{
+    public MyClova(ClovaConfiguration config)
+    {
+        SetDefaultLang(config.DefaultLang);
+    }
+}
 ```
 
 ## Call RespondAsync method

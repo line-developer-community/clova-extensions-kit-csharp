@@ -18,7 +18,7 @@ namespace LineDC.CEK
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddClova<IClova, MyClova>(Lang.En);
+            services.AddClova<IClova, MyClova>(new ClovaConfiguration { DefaultLang = Lang.En });
             services.AddMvc();
         }
 
