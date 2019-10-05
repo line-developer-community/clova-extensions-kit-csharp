@@ -6,6 +6,11 @@ namespace LineDC.CEK
 {
     public class MyClova : ClovaBase
     {
+        public MyClova(ClovaConfiguration config)
+        {
+            SetDefaultLang(config.DefaultLang);
+        }
+
         protected override async Task OnLaunchRequestAsync(Session session, CancellationToken cancellationToken)
         {
             // Single Text Reply

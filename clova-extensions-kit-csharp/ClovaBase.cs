@@ -30,12 +30,12 @@ namespace LineDC.CEK
             }
         }
 
-        private Lang DefaultLang { get; set; }
+        private Lang DefaultLang { get; set; } = Lang.Ja;
 
         protected CEKRequest Request { get; private set; }
         protected CEKResponse Response { get; private set; }
 
-        public void SetDefaultLang(Lang defaultLang = Lang.Ja)
+        public void SetDefaultLang(Lang defaultLang)
         {
             DefaultLang = defaultLang;
         }

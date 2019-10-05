@@ -11,6 +11,11 @@ namespace LineDC.CEK
         public IDurableOrchestrationClient DurableOrchestrationClient { get; set ; }
         public ILogger Logger { get; set; }
 
+        public MyDurableClova(ClovaConfiguration config)
+        {
+            SetDefaultLang(config.DefaultLang);
+        }
+
         protected override async Task OnLaunchRequestAsync(Session session, CancellationToken cancellationToken)
         {
             // check status
