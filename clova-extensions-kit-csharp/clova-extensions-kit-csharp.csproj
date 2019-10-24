@@ -13,7 +13,7 @@
     <PackageLicenseUrl>https://github.com/kenakamu/clova-cek-sdk-csharp/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/line-developer-community/clova-extensions-kit-csharp</PackageProjectUrl>
     <PackageTags>LINE,CEK,Clova</PackageTags>
-    <PackageReleaseNotes>0.2.2 - Bug fix
+    <PackageReleaseNotes>0.2.2 - Bug fix (Change clova instance from Singleton -&gt; Scoped)
 0.2.1 - Typo fix and referenced nuget version match
 0.2.0 - [Breaking Change included] Change name space and how it works. Released under LINE Developer Community
 0.1.8 - Added AudioPlayer
